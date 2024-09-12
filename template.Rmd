@@ -1,0 +1,141 @@
+---
+title: "Simple document"
+author: "Chhiring Lama"
+date: "2024-09-10"
+output:
+  word_document:
+    toc: true
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+  pdf_document:
+    toc: true
+---
+### this on the top is the YAML header
+
+I'm an R Markdown document! 
+
+# Section 1
+
+Here's a **code chunk** that samples from 
+a _normal distribution_:
+
+```{r eval = FALSE}
+samp = rnorm(100)
+length(samp)
+```
+
+Here eval = false keeps the code but does not run it
+
+```{r echo = FALSE}
+samp = rnorm(100)
+length(samp)
+```
+
+Here echo = false runs it but doesn't give the code that produced it
+
+# Section 2
+
+I can take the mean of the sample, too!
+The mean is `r mean(samp)`. ###this is inline R code
+
+## Learning Assessment:
+
+Write a named code chunk that creates a dataframe comprised of: a numeric variable containing a random sample of size 500 from a normal variable with mean 1; a logical vector indicating whether each sampled value is greater than zero; and a numeric vector containing the absolute value of each element. Then, produce a histogram of the absolute value variable just created. Add an inline summary giving the median value rounded to two decimal places. What happens if you set eval = FALSE to the code chunk? What about echo = FALSE?
+
+### Solution:
+
+```{r echo = FALSE, message = FALSE}
+##load library
+library(tidyverse)
+```
+
+
+
+```{r message = FALSE}
+set.seed(1)
+
+## create a dataframe
+example_df <- tibble(
+  sample = rnorm(500, mean = 1),
+  log_val = sample > 0, 
+  abs_val = abs(sample)
+  )
+```
+
+Here is the preview of first few rows of the dataframe:
+
+```{r message = FALSE}
+knitr::kable(head(example_df), format = "markdown")
+```
+
+
+Plot showing the histogram of the absolute value:
+
+```{r warning = FALSE, message = FALSE}
+##produce histogram for absolute value
+ggplot(example_df, aes(x = abs_val)) +
+  geom_histogram()
+```
+
+The median value of the absolute value variable is `r format(signif(median(example_df$abs_val), digits = 2), nsmall = 2)`.
+
+# Formatting Text
+
+Text formatting 
+------------------------------------------------------------
+
+*italic*  or  _italic_
+**bold**  or  __bold__
+`code`
+superscript^2^ and subscript~2~
+
+
+Headings
+------------------------------------------------------------
+
+# 1st Level Header
+
+## 2nd Level Header
+
+### 3rd Level Header
+
+
+Lists
+------------------------------------------------------------
+
+*   Bulleted list item 1
+
+*   Item 2
+
+    * Item 2a
+
+    * Item 2b
+
+1.  Numbered list item 1
+
+1.  Item 2. The numbers are incremented automatically in the output.
+
+
+Tables 
+------------------------------------------------------------
+
+First Header  | Second Header
+------------- | -------------
+Content Cell  | Content Cell
+Content Cell  | Content Cell
+
+## Learning assessment: 
+
+After the previous code chunk, write a bullet list given the mean, median, and standard deviation of the original random sample.
+
+## Solution:
+
+*   The mean of the random sample is **`r mean(example_df$sample)`**.
+*   The median of the random sample is **`r median(example_df$sample)`**.
+*   The standard deviation of the random sample is **`r sd(example_df$sample)`**.
+
+
+
+
